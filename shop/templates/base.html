@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  </head>
+
+<body class="d-flex flex-column min-vh-100">
+  <header>
+    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+      <div class="container">
+        <!-- Brand logo -->
+        <a class="navbar-brand" href="{{ url_for('home_page') }}">
+          <i class="fa-solid fa-cart-shopping" style="color: #deddda;"></i>
+          My shop
+        </a>
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Collapse menu -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link {% block active_home %}{% endblock %}" aria-current="page" href="{{ url_for('home_page') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% block active_shop %}{% endblock %}" href="{{ url_for('shop_page') }}">Shop</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Account
+              </a>
+                <ul class="dropdown-menu">
+                {% if current_user.is_authenticated %}
+                  <li class="p-2 ms-2">
+                    Hello, {{ current_user.username }}! <br>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>                  
+                  <li><a class="dropdown-item {% block active_cart %}{% endblock %} d-flex align-items-center gap-2" href="{{ url_for('cart_page') }}">
+                    <div>
+                      <i class="fa-solid fa-cart-shopping" style="color: #deddda;"></i>
+                      My Cart
+                    </div>
+                    <span class="badge text-bg-secondary ms-2r">{{ session['cart'].keys()|length if 'cart' in session else 0 }}</span>
+                  </a></li>
+                  <li><a class="dropdown-item" href="#">
+                    <i class="fa-solid fa-heart" style="color: #ffffff;"></i>
+                    Favorites
+                  </a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('logout_page') }}">
+                    <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ffffff;"></i>
+                    Logout
+                  </a></li>  
+               {% else %} 
+                  <li>
+                    <a href="{{ url_for('login_page') }}" class="dropdown-item {% block active_login %}{% endblock %}">
+                      Login
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <a href="{{ url_for('register_page') }}" class="dropdown-item {% block active_register%}{% endblock %}">
+                      Register
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </li>
+            <li class="mav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                More
+              </a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-item">
+                  <a href="#" class="nav-link" id="darkModeSwitch">
+                    <div class="form-check form-switch">
+                      <label class="form-check-label" for="flexSwitchCheckDefault">Dark mode</label>
+                      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <form class="d-lg-flex ms-auto d-none" role="search" method="post" action="{{ url_for('search_page') }}">
+          {{ search_form.search_input(class="form-control me-2", placeholder="Search") }}
+          {{ search_form.submit(class="btn btn-outline-success") }}
+          {% if current_user.is_authenticated %}
+            <i class="fas fa-coins align-self-center ms-3 text-success">{{ current_user.budget }}$</i>
+          {% endif %}
+          </form>
+        <form class="w-100 d-lg-none mt-2 d-flex" role="search" method="post" action="{{ url_for('search_page') }}">
+          {{ search_form.search_input(class="form-control me-2", placeholder="Search") }}
+          {{ search_form.submit(class="btn btn-outline-success") }}
+          {% if current_user.is_authenticated %}
+            <i class="fas fa-coins align-self-center ms-3 text-success">{{ current_user.budget }}$</i>
+          {% endif %}
+          </form>
+      </div>
+    </nav>
+
+    <script>
+      document.getElementById('darkModeSwitch').addEventListener('click', event => {
+        event.stopPropagation();
+      });
+    </script>
+    
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show my-1 text-center" role="alert">
+        {% if category=='danger' %}
+          <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" width="1em" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+          </svg>
+        {% elif category=='success' %}
+          <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" width="1em" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+          </svg>
+        {% elif category=='info' %}
+          <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" width="1em" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+          </svg>   
+        {% endif %}        
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+    {% endif %}
+
+  {% endwith %}
+
+  <main>
+    {% block main %}{% endblock %}
+  </main>
+
+  <footer class="footer bg-dark text-white py-4 mt-auto">
+    <div class="container">
+      <div class="row gap-3">
+        <div class="col-md-5">
+          <h5>About</h5>
+          <p>We are a company with love for shopping. Glad we can do this for the money... We love money too.</p>
+        </div>
+        <div class="col-md-3">
+          <h5>Kontakt</h5>
+          <ul class="list-unstyled">
+            <li>Email: kontakt@firma.pl</li>
+            <li>Phone: 123-456-789</li>
+            <li>Address: Ul. Przykładowa 12, Warszawa</li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>Follow us</h5>
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fa-brands fa-facebook-f" style="color: #ffffff;"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fa-brands fa-x-twitter" style="color: #ffffff;"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fa-brands fa-instagram" style="color: #ffffff;"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col text-center">
+          <p>&copy; 2024 Your company. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <script src="https://kit.fontawesome.com/caf0cf32d4.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+
+
+
+</html>

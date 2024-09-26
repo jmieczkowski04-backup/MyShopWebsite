@@ -1,0 +1,47 @@
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+
+    <div class="modal fade" id="modalMoreInfo-{{ item.id }}"
+    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+        <div class="modal-header text-center">
+            <h2 class="modal-title w-100" id="staticBackdropLabel">
+                {{ item.name }}<i class="fas fa-coins align-self-center ms-3 text-success"></i>
+                {{ item.price }}$
+            </h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row text-center">
+                    <div class="col-md-6">
+                        <img src="https://picsum.photos/seed/picsum/200/300" alt="Item picture" class="img-fluid">
+                    </div>
+                    <div class="col-md-6 mt-4">
+                        <div class="form-floating mb-0">
+                            <input type="hidden" value="{{ item.id }}" name="purchased_item">
+                            {{ form.amount(class="form-control" + (" is-invalid" if form.amount.errors else ""), min=1, max=item.amount, value=1) }}
+                            {{ form.amount.label(class="form-label") }}
+                        </div>
+                        <p class="mt-0 mb-4">
+                            <i><small>There are {{ item.amount }} of this item</small></i>
+                        </p>
+                        {{ item.description }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" name="submit" value="x">
+                Add to the 
+                <i class="fa-solid fa-cart-shopping" style="color: #deddda;"></i>
+            </button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+</form>
+  

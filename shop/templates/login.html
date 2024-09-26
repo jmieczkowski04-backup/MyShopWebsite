@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %} My Shop: LOGIN {% endblock %}
+
+{% block active_login %} active {% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <h1 class="my-4">Login</h1>
+
+    <form class="row g-3" novalidate method="post">
+        {{ form.hidden_tag() }}
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">@</span>
+                <div class="form-floating">
+                    {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else ""), placeholder="Username") }}
+                    {{ form.username.label() }}
+                    {% for error in form.username.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}   
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-floating">
+                {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), placeholder="Password") }}
+                {{ form.password.label() }}
+                {% for error in form.password.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}  
+            </div>
+        </div>
+        <div class="col-12 mb-2">
+            <div class="form-check">
+                {{ form.remember_me(class="form-check-input") }}
+                {{ form.remember_me.label(class="form-check-label") }}
+            </div>                
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex flex-column">
+                <h6>Forgot your password?</h6>
+                <a href="#" class="btn btn-outline-primary" style="width: 150px">Recover account</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex flex-column">
+                <h6>Don't have an account?</h6>
+                <a href="{{ url_for('register_page') }}" class="btn btn-outline-primary" style="width: 150px">Register</a>
+            </div>
+        </div>
+        <div class="col-12 mt-4 mb-5">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

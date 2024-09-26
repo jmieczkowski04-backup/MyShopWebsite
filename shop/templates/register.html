@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %} My Shop: REGISTER {% endblock %}
+
+{% block active_register %} active {% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <h1 class="my-4">Register</h1>
+
+    <form class="row g-3 mb-5" novalidate method="post">
+        {{ form.hidden_tag() }}
+        <div class="col-md-6">
+            {{ form.username.label(class="form-label") }}
+            <div class="input-group">
+                <span class="input-group-text" id="inputGroupPrepend">@</span>
+                {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else ""))}}
+                {% for error in form.username.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}         
+            </div>
+        </div>
+        <div class="col-md-6">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""))}}
+            {% for error in form.email.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}      
+        </div>
+        <div class="col-md-4">
+            {{ form.password1.label(class="form-label") }}
+            {{ form.password1(class="form-control" + (" is-invalid" if form.password1.errors or form.password2.errors else "")) }}
+            {% for error in form.password1.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            {{ form.password2.label(class="form-label") }}
+            {{ form.password2(class="form-control" + (" is-invalid" if form.password2.errors else "")) }}
+            {% for error in form.password2.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}   
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            {{ form.accept(class="form-check-input" + (" is-invalid" if form.accept.errors else "")) }}
+            {{ form.accept.label(class="form-check-label") }}
+            {% for error in form.accept.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}    
+          </div>
+        </div>
+        <div class="col-12 my-3">
+            <div class="d-flex gap-3 align-items-center mt-3">
+                <h6>Already have an account?</h6>
+                <a href="{{ url_for('login_page') }}" class="btn btn-outline-primary" style="width: 150px">Login</a>
+            </div>
+        </div>
+        <div class="col-12">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

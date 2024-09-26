@@ -1,0 +1,50 @@
+
+<div class="modal fade" id="modalBuy" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h2 class="modal-title w-100" id="staticBackdropLabel">
+            Are you sure?
+        </h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center fw-bold">
+          Are you sure you want to buy these items for {{ total }}$ ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success">Yes, BUY</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalInfo-{{ item.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h2 class="modal-title w-100" id="staticBackdropLabel">
+            {{ item.name }}<i class="fas fa-coins align-self-center ms-3 text-success"></i>
+            {{ item.price }}$
+        </h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row text-center">
+              <div class="col-md-6 mb-4">
+                  <img src="https://picsum.photos/seed/picsum/200/300" alt="Item picture" class="img-fluid">
+              </div>
+              <div class="col-md-6">
+                  {{ item.description }}
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

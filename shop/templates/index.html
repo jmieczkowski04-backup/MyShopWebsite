@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %} My shop {% endblock %}
+
+{% block active_home %}active{% endblock %}
+
+{% block main %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      
+      <div id="carouselExampleIndicators" class="carousel slide mt-5" data-bs-ride="carousel" data-bs-theme="dark" style="max-height: 40vh; overflow: hidden;">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="container">
+              <div class="row d-flex">
+                  <div class="col-md-5 d-none d-lg-inline mb-5">
+                      <img src="{{ url_for('static', filename='shoping_cart.png') }}" alt="image" class="img-fluid" style="object-fit: contain; height: 250px; width: 100%;">
+                  </div>
+                  <div class="col-12 mx-auto col-md-7 align-self-center mb-5
+                        w-50 w-lg-100">
+                      <h3>1000 years of experience</h3>
+                      <h6>Our store has been run for over 1000 years, all equally successful</h6>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="container">
+              <div class="row d-flex">
+                  <div class="col-md-5 d-none d-lg-inline mb-5">
+                      <img src="{{ url_for('static', filename='writing_pen.png') }}" alt="image" class="img-fluid" style="object-fit: contain; height: 250px; width: 100%;">
+                  </div>
+                  <div class="col-12 mx-auto col-md-7 align-self-center mb-5
+                        w-50 w-lg-100">
+                      <h3>100 mln positive reviews</h3>
+                      <h6>Our store has been praised by all of its users - no wrong review EVER</h6>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    
+    </div>
+  </div>
+
+  <div class="row mt-4 mx-3 my-5 d-flex align-items-stretch">
+    
+    <div class="col-md-6 my-2">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Ready for some shopping?</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Thousands of products wait for you to buy</h6>
+          <a href="{{ url_for('shop_page') }}" class="btn btn-dark">
+            Start shopping
+            <i class="fa-solid fa-cart-shopping" style="color: #deddda;"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6 my-2">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Or maybe selling?</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">You can sell unwanted stuff here</h6>
+            <a href="#" class="btn btn-dark">
+              Start selling
+              <i class="fa-solid fa-coins" style="color: #ffffff;"></i>
+            </a>
+          </div>
+        </div>
+    </div>
+  
+  </div>
+</div>
+{% endblock %}

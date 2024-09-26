@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %} My shop: CART {% endblock %}
+
+{% block active_cart %} active {% endblock %}
+
+{% block main %}
+<h1 class="my-4 ms-3">Your cart</h1>
+<table class="table {{'table-hover' if items and items_amounts else ''}} my-4">
+    <thead>
+        <tr>
+        <th scope="col" width="5%">#</th>
+        <th scope="col" width="30%">Name</th>
+        <th scope="col" width="20%">Price</th>
+        <th scope="col" width="25%">Amount</th>
+        <th scope="col" width="20%">Options</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        {% if not items and not items_amounts %}
+        <tr>
+            <td colspan="4">
+                <h6 class="p-3 ms-3">There are no items in your cart</h6>
+            </td>
+        </tr>
+        {% else %}
+            {% for index, item, amount in zip(counter_list, items, items_amounts) %}
+            {% include 'includes/buy_modal.html' %}
+            <tr>
+                <th scope="row">{{ index }}</th>
+                <td>{{ item.name }}</td>
+                <td>{{ item.price * amount }} $</td>
+                <td>
+                    <form method="post" novalidate>
+                        {{ change_amount_form.hidden_tag() }}
+                        <input type="hidden" value="{{ item.id }}" name="selected_item">
+                        <div class="input-group mb-3 input-group flex-nowrap" style="width: 150px;">
+                            {{ change_amount_form.minus_submit(class="btn btn-outline-danger" + (" disabled" if amount==1 else '')) }}
+                            <input type="text" class="form-control text-center" placeholder="" readonly value="{{ amount }}">
+                            {{ change_amount_form.plus_submit(class="btn btn-outline-success" + (" disabled" if amount==item.amount else '')) }}
+                            <button class="btn btn-secondary" type="submit" id="buttonDelete" name="delete" value="x">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        </div>    
+                    </form>                 
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInfo-{{ item.id }}">
+                        INFO
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+<div class="container text-end mb-5">
+    <div class="row d-flex align-items-center">
+        <div class="col-3 offset-4 fw-bold col-lg-2 offset-lg-7">
+            Total: {{ total }}$
+        </div>
+        <div class="col-5 col-lg-3 btn-group" role="group">
+            <button type="button" class="btn btn-success {{ 'disabled' if not items and not items_amounts else '' }}" data-bs-toggle="modal" data-bs-target="#modalBuy">
+                BUY
+            </button>
+            <a class="btn btn-primary" href="{{ url_for('shop_page') }}">
+                Go to the shop
+            </a>
+        </div>
+</div>
+{% endblock %}
