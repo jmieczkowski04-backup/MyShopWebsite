@@ -9,24 +9,27 @@
 <a href="{{ url_for('cart_page') }}" class="btn btn-primary ms-5">
     See the <i class="fa-solid fa-cart-shopping"></i>
 </a>
+{% if not items %}
+    <h5 class="fw-bold mt-4 text-center">Nothing's here... :c</h5>
+{% else %}
 <div class="container my-4">
     <div class="row">
-        {% for item in items %}
-        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3 mb-sm-0">
-            {% include 'includes/info_modal.html' %}
-            <div class="card text-center">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.name }}</h5>
-                    <h6>${{ item.price }}</h6>
-                    <p class="card-text">{{ item.description }}</p>
-                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalMoreInfo-{{ item.id }}">
-                        See this product
-                    </button>
+            {% for item in items %}
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3 mb-sm-0">
+                {% include 'includes/info_modal.html' %}
+                <div class="card text-center">
+                    <img src="{{ item.images[0].img_src }}" class="card-img-top img-fluid product_img" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <h6>${{ item.price }}</h6>
+                        <p class="card-text">{{ item.description }}</p>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalMoreInfo-{{ item.id }}">
+                            See this product
+                        </button>
+                    </div>
                 </div>
             </div>
-          </div>
-        {% endfor %}
+            {% endfor %}
     </div>
     {% if pages > 1 %}
     <div class="row mb-4 mt-5">
@@ -52,6 +55,7 @@
     </div>
     {% endif %}
 </div>
+{% endif %}
 
 <script>
     function setPerPage(){
@@ -65,8 +69,6 @@
         }
         let currentUrl = new URL(window.location.href);
         let currentPerPage = currentUrl.searchParams.get("per_page");
-        console.log(currentPerPage)
-        console.log(perPage)
         if(parseInt(currentPerPage) !== perPage){
             currentUrl.searchParams.set("per_page", perPage);
             window.location.href = currentUrl.href;

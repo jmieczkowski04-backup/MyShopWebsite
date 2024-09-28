@@ -16,7 +16,7 @@
             <div class="container-fluid">
                 <div class="row text-center">
                     <div class="col-md-6">
-                        <img src="https://picsum.photos/seed/picsum/200/300" alt="Item picture" class="img-fluid">
+                        {% include 'includes/item_img.html' %}
                     </div>
                     <div class="col-md-6 mt-4">
                         <div class="form-floating mb-0">
@@ -35,7 +35,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-success" name="submit" value="x">
-                Add to the 
+                Add to the
                 <i class="fa-solid fa-cart-shopping" style="color: #deddda;"></i>
             </button>
         </div>
@@ -44,4 +44,3 @@
     </div>
 
 </form>
-  

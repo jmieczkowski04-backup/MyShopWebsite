@@ -30,7 +30,7 @@ def shop_page():
                 session['cart'] = {}
             session['cart'][item_id] = item_amount
             flash(Markup(f"You added {item.name} (x{item_amount}) to your cart - see it <a href='{url_for('cart_page')}' class='alert-link'> here </a>"),
-                category='success')
+                  category='success')
             return redirect(url_for('shop_page', per_page=request.args.get('per_page', 10)))
         else:
             flash(f"There was a problem with adding {item.name} to your cart", category='danger')
@@ -39,13 +39,18 @@ def shop_page():
     else:
         per_page = request.args.get('per_page', 10, type=int)
         page = request.args.get('page', 1, type=int)
-        items = db.paginate(db.select(Item), page=page, per_page=per_page)
+        searched_name = request.args.get('search_name', '')
+        query = db.select(Item)
+        if searched_name:
+            query = query.where(Item.name.ilike(f"%{searched_name}%"))
+
+        items = db.paginate(query, page=page, per_page=per_page)
         next_url = url_for('shop_page', page=items.next_num) if items.has_next else None
         prev_url = url_for('shop_page', page=items.prev_num) if items.has_prev else None
-        return render_template('shop.html', items=items, pages=items.pages, page=items.page,
+        return render_template('shop.html', items=items.items, pages=items.pages, page=items.page,
                                next_url=next_url, prev_url=prev_url,
                                form=form, search_form=search_form)
-# https://stackoverflow.com/questions/77526573/how-to-create-a-search-functionality-in-flask-that-will-be-based-on-query-parame
+
 
 @app.route('/cart', methods=['POST', 'GET'])
 @login_required
@@ -53,7 +58,7 @@ def cart_page():
     change_amount_form = ChangeAmountForm()
     buy_form = BuyForm()
     search_form = SearchForm()
-    
+
     if request.method == 'POST':
         if change_amount_form.validate_on_submit():
             item_id = request.form['selected_item']
@@ -65,7 +70,7 @@ def cart_page():
                 print(session['cart'])
             else:
                 del session['cart'][item_id]
-            
+
             session.modified = True
             return redirect(url_for('cart_page'))
 
@@ -85,10 +90,10 @@ def cart_page():
                 counter_list.append(counter)
                 counter += 1
                 total += item.price * amount
-        
-        return render_template('cart.html',items=items, items_amounts=items_amounts,
-                           total=total, counter_list=counter_list, zip=zip,
-                           change_amount_form=change_amount_form, buy_form=buy_form, search_form=search_form)
+
+        return render_template('cart.html', items=items, items_amounts=items_amounts,
+                               total=total, counter_list=counter_list, zip=zip,
+                               change_amount_form=change_amount_form, buy_form=buy_form, search_form=search_form)
 
 
 @app.route('/search', methods=["POST"])
@@ -109,12 +114,12 @@ def register_page():
         db.session.commit()
         login_user(user_to_create)
         flash("You have successfully registered :)", category='success')
-        return redirect(url_for('shop_page'))
+        return redirect(url_for('shop_page', per_page=request.args.get("per_page", 10)))
 
     if form.errors:
         flash("There were problems with creating your account", category='danger')
 
-    return render_template('register.html', form=form)
+    return render_template('register.html', form=form, search_form=None)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -130,12 +135,15 @@ def login_page():
         if not url_has_allowed_host_and_scheme(next, request.host) and next is not None:
             return abort(400)
 
-        return redirect(next or url_for('shop_page'))
+        if next is None:
+            return redirect(url_for('shop_page', per_page=request.args.get('per_page', 10)))
+        else:
+            return redirect(url_for(next, per_page=request.args.get('per_page', 10)))
 
     if form.errors:
         flash("There were problems with logging into your account", category='danger')
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, search_form=None)
 
 
 @app.route("/logout")
@@ -145,7 +153,7 @@ def logout_page():
         logout_user()
         session.clear()
         flash("You have been logged out ;)", category='info')
-        return redirect(url_for('home_page'))
+        return redirect(url_for('home_page', per_page=request.args.get('per_page', 10)))
     except Exception:
         flash("Something went wrong while logging out...", category='danger')
-        return redirect(url_for('login_page'))
+        return redirect(url_for('login_page', per_page=request.args.get('per_page', 10)))
