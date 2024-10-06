@@ -41,8 +41,8 @@
                             <button class="btn btn-secondary" type="submit" id="buttonDelete" name="delete" value="x">
                                 <i class="bi bi-trash3-fill"></i>
                             </button>
-                        </div>    
-                    </form>                 
+                        </div>
+                    </form>
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInfo-{{ item.id }}">
@@ -57,11 +57,11 @@
 
 <div class="container text-end mb-5">
     <div class="row d-flex align-items-center">
-        <div class="col-3 offset-4 fw-bold col-lg-2 offset-lg-7">
-            Total: {{ total }}$
+        <div class="col-3 offset-4 fw-bold col-lg-2 offset-lg-7 {{ 'text-danger' if current_user.budget < total else 'text-success' }}">
+            <strong>Total: {{ total }}$</strong>
         </div>
         <div class="col-5 col-lg-3 btn-group" role="group">
-            <button type="button" class="btn btn-success {{ 'disabled' if not items and not items_amounts else '' }}" data-bs-toggle="modal" data-bs-target="#modalBuy">
+            <button type="button" class="btn btn-success {{ 'disabled' if not items or current_user.budget < total else '' }}" data-bs-toggle="modal" data-bs-target="#modalBuy">
                 BUY
             </button>
             <a class="btn btn-primary" href="{{ url_for('shop_page') }}">

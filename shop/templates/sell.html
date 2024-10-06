@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %} My Shop: SELL {% endblock %}
+{% block active_sell %} active {% endblock %}
+
+{% block main %}
+<div class="container my-5">
+    {% if not item %}
+        <h1 class="my-4">Add item to our shop</h1>
+    {% else %}
+        <h1 class="my-4">Edit item - {{ item.name }}</h1>
+    {% endif %}
+    <form class="row gx-3 gy-2" method="post" novalidate enctype="multipart/form-data" id="sellForm">
+        {{ form.hidden_tag() }}
+        <div class="col-md-8">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else ""), placeholder="Product name") }}
+            {% for error in form.name.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            {{ form.category.label(class="form-label" ) }}
+            {{ form.category(class="form-select" + (" is-invalid" if form.category.errors else "")) }}
+            {% for error in form.category.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+        <div class="col-md-3">
+            {{ form.price.label(class="form-label") }}
+            <div class="input-group">
+                <div class="input-group-text">$</div>
+                {{ form.price(class="form-control" + (" is-invalid" if form.price.errors else ""), min="0", step="any") }}
+                {% for error in form.price.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-3">
+            {{ form.amount.label(class="form-label") }}
+            {{ form.amount(class="form-control" + (" is-invalid" if form.amount.errors else ""), min="1") }}
+            {% for error in form.amount.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form.img.label(class="form-label") }}
+            {{ form.img(class="form-control" + (" is-invalid" if form.img.errors else "") ) }}
+            {% for error in form.img.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+
+            {% if item %}
+            <div style="overflow: scroll;">
+                {% for img in item.images %}
+                    <div class="position-relative d-inline-block mt-2" style="width: 20%;">
+                        <img src="{{ url_for('static', filename=img.img_src) }}" alt="item image" class="img-fluid" style="width: 100%;">
+                        <span class="position-absolute" style="top: -5px; right: 5px;">
+                            {{ form.delete_img(formaction=url_for('delete_image', item_id=item.id, img_id=img.id), class="btn btn-danger btn-sm rounded-pill px-2 py-1" + (' disabled' if item.images|length <= 1 else ''), style="font-size: 10px;") }}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+        <div class="col-12">
+            {{ form.description.label(class="form-label") }}
+            {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), placeholder="Give description to your product") }}
+            {% for error in form.description.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="col-auto mt-3">
+            {{ form.submit(class="btn btn-primary") }}
+            <a class="btn btn-secondary" href="{{ url_for('my_items_page') }}">Exit</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    let val = document.getElementById("sellForm");
+    val.onkeypress = function (key) {
+        var btn = 0 || key.keyCode || key.charCode;
+        if (btn == 13) {
+            key.preventDefault();
+        }
+    }
+</script>
+
+{% endblock %}

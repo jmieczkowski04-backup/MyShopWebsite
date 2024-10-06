@@ -1,23 +1,23 @@
 {% if item.images|length > 1 %}
-<div id="carouselExample" class="carousel carousel-dark slide" data-bs-ride="carousel">
+<div id="carouselExample-{{ item.id }}" class="carousel carousel-dark slide" data-bs-ride="carousel">
     <div class="carousel-inner">
         {% for img in item.images %}
             <div class="carousel-item {% if loop.first %}active{% endif %}">
-                <img src="{{ img.img_src }}" alt="Item picture" class="img-fluid product_img_info">
+                <img src="{{ url_for('static', filename=img.img_src) }}" alt="Item picture" class="img-fluid product_img_info">
             </div>
         {% endfor %}
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample-{{ item.id }}" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample-{{ item.id }}" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
 </div>
 {% else %}
-<img src="{{ item.images[0].img_src }}" alt="Item picture" class="img-fluid product_img_info">
+<img src="{{ url_for('static', filename=item.images[0].img_src) }}" alt="Item picture" class="img-fluid product_img_info">
 {% endif %}
 
 <style>

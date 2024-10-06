@@ -8,7 +8,7 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      
+
       <div id="carouselExampleIndicators" class="carousel slide mt-5" data-bs-ride="carousel" data-bs-theme="dark" style="max-height: 40vh; overflow: hidden;">
         <div class="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -53,12 +53,12 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-    
+
     </div>
   </div>
 
   <div class="row mt-4 mx-3 my-5 d-flex align-items-stretch">
-    
+
     <div class="col-md-6 my-2">
       <div class="card h-100">
         <div class="card-body">
@@ -71,20 +71,20 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col-md-6 my-2">
         <div class="card h-100">
           <div class="card-body">
             <h5 class="card-title">Or maybe selling?</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary">You can sell unwanted stuff here</h6>
-            <a href="#" class="btn btn-dark">
+            <a href="{{ url_for('sell_page') }}" class="btn btn-dark">
               Start selling
               <i class="fa-solid fa-coins" style="color: #ffffff;"></i>
             </a>
           </div>
         </div>
     </div>
-  
+
   </div>
 </div>
 {% endblock %}

@@ -6,6 +6,8 @@ from flask_login import LoginManager
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///shop.db"
 app.config['SECRET_KEY'] = 'f988491057a37c0c123497f48c51b7ddee60a2e52393391288971cf6f8f4c0a1'
+app.config['UPLOAD_FOLDER'] = 'static/product_images'
+app.config['IMG_DIR'] = 'static'
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)

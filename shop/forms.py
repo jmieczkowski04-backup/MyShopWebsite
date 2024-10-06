@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from flask_wtf.form import _Auto
-from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, ValidationError, IntegerField, SearchField
+from wtforms import (StringField, PasswordField, EmailField,
+                     SubmitField, BooleanField, ValidationError,
+                     IntegerField, SearchField, MultipleFileField, SelectField, TextAreaField)
 from wtforms.validators import Length, Email, EqualTo, DataRequired
 from shop.models import User, Item
 
@@ -30,23 +31,23 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField(label="Remember me")
     submit = SubmitField(label="Login")
 
-    def __init__(self,*k,**kk):
-      self._user = None
-      super(LoginForm,self).__init__(*k,**kk)
+    def __init__(self, *k, **kk):
+        self._user = None
+        super(LoginForm, self).__init__(*k, **kk)
 
     def validate(self, *k, **kk):
-       self._user = User.query.filter_by(username=self.username.data).first()
-       return super(LoginForm, self).validate(*k, **kk)
+        self._user = User.query.filter_by(username=self.username.data).first()
+        return super(LoginForm, self).validate(*k, **kk)
 
     def validate_username(self, field):
-       if self._user is None:
-           raise ValidationError("This user doesn't exist")
+        if self._user is None:
+            raise ValidationError("This user doesn't exist")
 
     def validate_password(self, field):
-       if self._user is None:
-           raise ValidationError()
-       if not self._user.check_password(self.password.data):
-           raise ValidationError("Password incorrect")
+        if self._user is None:
+            raise ValidationError()
+        if not self._user.check_password(self.password.data):
+            raise ValidationError("Password incorrect")
 
 
 class AddToCartForm(FlaskForm):
@@ -60,10 +61,30 @@ class ChangeAmountForm(FlaskForm):
     delete_submit = SubmitField(label="Delete")
 
 
-class BuyForm(FlaskForm):
-    pass
-
-
 class SearchForm(FlaskForm):
     search_input = SearchField(label="name", validators=[DataRequired()])
     submit = SubmitField(label="Search")
+
+
+class SellForm(FlaskForm):
+    def validate_category(self, category_to_check):
+        if category_to_check.data == "Null":
+            raise ValidationError("Give proper category")
+
+    def validate_img(self, img_to_check):
+        item = Item.query.filter_by(name=self.name.data).first()
+        if item:
+            if len(img_to_check.data[0].filename) == 0 and not item.images:
+                raise ValidationError('You need to upload at least one file')
+        else:
+            if len(img_to_check.data[0].filename) == 0:
+                raise ValidationError('You need to upload at least one file')
+
+    name = StringField(label="Name", validators=[DataRequired(), Length(min=2, max=30)])
+    category = SelectField(label="Category", choices=[("Null", "Choose category..."), ("Clothes", "Clothes"), ("Electronics", "Electronics"), ("Sport", "Sport"), ("Toys", "Toys"), ("Health&Care", "Health&Care"), ("Books", "Books"), ("Other", "Other")])
+    price = IntegerField(label="Price", validators=[DataRequired()])
+    amount = IntegerField(label="Amount", validators=[DataRequired()])
+    img = MultipleFileField(label="Select images", validators=[DataRequired()])
+    description = TextAreaField(label="Description", validators=[DataRequired(), Length(min=10, max=1024)])
+    delete_img = SubmitField(label="X")
+    submit = SubmitField(label="Submit")

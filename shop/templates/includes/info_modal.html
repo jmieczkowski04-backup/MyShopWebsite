@@ -6,10 +6,13 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
         <div class="modal-header text-center">
-            <h2 class="modal-title w-100" id="staticBackdropLabel">
-                {{ item.name }}<i class="fas fa-coins align-self-center ms-3 text-success"></i>
-                {{ item.price }}$
+            <h2 class="modal-title" id="staticBackdropLabel">
+                {{ item.name }}
             </h2>
+            <h4 class="mt-2">
+                <i class="fas fa-coins align-self-center ms-3 text-success"></i>
+                {{ item.price }}$
+            </h4>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

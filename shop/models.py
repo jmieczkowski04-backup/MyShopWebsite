@@ -28,10 +28,10 @@ class User(db.Model, UserMixin):
 
 class Item(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(length=30), nullable=False, unique=True)
-    barcode = db.Column(db.String(length=12), nullable=False, unique=True)
+    name = db.Column(db.String(length=30), nullable=False)
     price = db.Column(db.Integer(), nullable=False)
-    description = db.Column(db.String(length=1024), nullable=False, unique=True)
+    description = db.Column(db.String(length=1024), nullable=False)
+    category = db.Column(db.String(length=25))
     amount = db.Column(db.Integer(), nullable=False, default=1)
     owner_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
 
@@ -39,6 +39,9 @@ class Item(db.Model):
 
     def __repr__(self) -> str:
         return f"Item - name: {self.name}, price: {self.price}$"
+
+    def __eq__(self, other: object) -> bool:
+        return self.name == other.name and self.price == other.price and self.description == other.description and self.category == other.category
 
 
 class Image(db.Model):

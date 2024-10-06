@@ -15,14 +15,13 @@
 <div class="container my-4">
     <div class="row">
             {% for item in items %}
-            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3 mb-sm-0">
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3 mb-sm-0 d-flex align-items-stretch">
                 {% include 'includes/info_modal.html' %}
                 <div class="card text-center">
-                    <img src="{{ item.images[0].img_src }}" class="card-img-top img-fluid product_img" alt="...">
+                    <img src="{{ url_for('static', filename=item.images[0].img_src) }}" class="card-img-top img-fluid product_img" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ item.name }}</h5>
                         <h6>${{ item.price }}</h6>
-                        <p class="card-text">{{ item.description }}</p>
                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalMoreInfo-{{ item.id }}">
                             See this product
                         </button>
@@ -74,7 +73,6 @@
             window.location.href = currentUrl.href;
         }
     }
-    setPerPage();
     window.addEventListener("resize", setPerPage)
 </script>
 

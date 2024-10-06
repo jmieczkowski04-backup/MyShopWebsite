@@ -1,0 +1,22 @@
+<div class="modal fade" id="modalDelete-{{ item.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h2 class="modal-title w-100" id="staticBackdropLabel">
+            Are you sure?
+        </h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center fw-bold">
+          Are you sure you want to delete this {{ item.name }} from our shop ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <form method="post" action="{{ url_for('my_items_page') }}">
+            <input type="hidden" value="{{ item.id }}" name="selected_item">
+            <button type="submit" class="btn btn-danger" name="deleteBtn">Yes, delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
